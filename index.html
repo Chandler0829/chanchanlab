@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chanchan Lab · 知识管理 & Mac 自动化</title>
+<meta name="description" content="你好呀，我是 Chanchan。在这里分享 Obsidian 笔记、Mac 自动化和我的写作。">
+
+<meta property="og:title" content="Chanchan Lab">
+<meta property="og:description" content="知识管理 · Obsidian · Mac 自动化">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ===== A1 精简版：象牙暖白 + 朱红 ===== */
+  :root {
+    --bg: #f0e9da;
+    --bg-elev: #faf3e3;
+    --ink: #161310;
+    --ink-2: #3a342c;
+    --ink-mute: #807766;
+    --line: #c8bca4;
+    --accent: #9c2a1f;
+    --accent-2: #d4b87a;
+
+    --radius: 16px;
+    --shadow-md: 0 8px 32px -12px rgba(22, 19, 16, 0.15), 0 2px 8px rgba(22, 19, 16, 0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Noto Serif SC', 'Fraunces', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse 1400px 700px at 100% -200px, rgba(156, 42, 31, 0.05), transparent 60%),
+      radial-gradient(ellipse 900px 700px at -200px 100%, rgba(212, 184, 122, 0.10), transparent 60%);
+  }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  /* ===== 紧凑刊头：单行布局 ===== */
+  .masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 14px;
+    margin-bottom: 36px;
+    border-bottom: 1px solid var(--ink);
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .masthead-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+  }
+  .logo-main {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(26px, 4vw, 34px);
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+  .logo-main .lab {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+  .logo-stamp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'Noto Serif SC', serif;
+    font-size: 13px;
+    font-weight: 500;
+    transform: rotate(-6deg);
+    box-shadow: 1.5px 1.5px 0 rgba(22, 19, 16, 0.12);
+    position: relative;
+  }
+  .logo-stamp::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border: 1px solid var(--bg);
+  }
+  .masthead-meta {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-mute);
+    padding-left: 4px;
+    border-left: 1px solid var(--line);
+    margin-left: 4px;
+    padding-left: 14px;
+  }
+  .masthead-meta .vol { color: var(--accent); font-weight: 500; }
+  .topnav {
+    display: flex;
+    gap: 22px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .topnav a {
+    color: var(--ink-2);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .topnav a:hover { color: var(--accent); }
+
+  /* ===== Hero：紧凑、单行问候 ===== */
+  .hero {
+    margin-bottom: 28px;
+  }
+  .greeting {
+    font-family: 'Fraunces', 'Noto Serif SC', serif;
+    font-weight: 400;
+    font-size: clamp(24px, 3.6vw, 32px);
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+  .greeting .you-hao {
+    color: var(--ink-mute);
+    font-style: italic;
+    font-weight: 300;
+  }
+  .greeting .name {
+    color: var(--ink);
+    font-weight: 600;
+    font-style: normal;
+    position: relative;
+    display: inline-block;
+    padding: 0 4px;
+  }
+  .greeting .name::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 6%;
+    height: 32%;
+    background: var(--accent);
+    opacity: 0.18;
+    z-index: -1;
+    transform: skewX(-8deg);
+  }
+  .greeting .wave {
+    display: inline-block;
+    font-size: 0.85em;
+    animation: wave 2.6s ease-in-out infinite;
+    transform-origin: 70% 70%;
+    margin-left: 4px;
+  }
+  @keyframes wave {
+    0%, 60%, 100% { transform: rotate(0deg); }
+    10%, 30% { transform: rotate(14deg); }
+    20% { transform: rotate(-8deg); }
+    40%, 50% { transform: rotate(10deg); }
+  }
+  .role {
+    font-family: 'Noto Serif SC', serif;
+    color: var(--ink-2);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .role .tag {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--accent);
+    padding: 0 2px;
+    font-weight: 400;
+  }
+
+  /* ===== 介绍段 ===== */
+  .intro {
+    border-left: 2px solid var(--accent);
+    padding: 2px 0 2px 20px;
+    margin-bottom: 44px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 14.5px;
+    line-height: 1.85;
+    color: var(--ink-2);
+    max-width: 60ch;
+  }
+  .intro .hl {
+    background-image: linear-gradient(transparent 70%, rgba(156, 42, 31, 0.18) 70%);
+    padding: 0 3px;
+    color: var(--ink);
+  }
+
+  /* ===== 章节标题 ===== */
+  .section { margin-bottom: 52px; }
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--ink);
+    position: relative;
+  }
+  .section-head h2 {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  /* N°1 红色印章式标签 */
+  .section-head h2 .num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--bg);
+    background: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    padding: 4px 10px 4px 9px;
+    border-radius: 3px;
+    line-height: 1;
+    flex-shrink: 0;
+    transform: translateY(-1px);
+  }
+  /* 主标题：放大 + 全部用大字距大写英译做副标，让标题"成块" */
+  .section-head h2 .title-zh {
+    font-family: 'Fraunces', 'Noto Serif SC', serif;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .section-head h2 .title-en {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    padding-left: 12px;
+    border-left: 1px solid var(--line);
+    line-height: 1;
+  }
+  .section-head .more {
+    font-family: 'Inter', sans-serif;
+    color: var(--ink-mute);
+    font-size: 11px;
+    text-decoration: none;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .section-head .more:hover { color: var(--accent); }
+
+  /* ===== 文章列表 ===== */
+  .post-list { display: flex; flex-direction: column; }
+  .post {
+    display: flex;
+    align-items: baseline;
+    text-decoration: none;
+    color: var(--ink);
+    padding: 18px 4px;
+    border-bottom: 1px solid var(--line);
+    gap: 18px;
+    transition: padding-left 0.3s ease, background 0.3s ease;
+  }
+  .post:hover {
+    padding-left: 14px;
+    background: linear-gradient(90deg, rgba(156, 42, 31, 0.04), transparent 70%);
+  }
+  .post .num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--accent);
+    width: 28px;
+    flex-shrink: 0;
+    font-weight: 400;
+  }
+  .post .body { flex: 1; min-width: 0; }
+  .post .title {
+    font-family: 'Fraunces', 'Noto Serif SC', serif;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 1.35;
+    letter-spacing: -0.005em;
+    margin-bottom: 5px;
+  }
+  .post .meta {
+    font-size: 11.5px;
+    color: var(--ink-mute);
+    letter-spacing: 0.04em;
+    font-family: 'Inter', sans-serif;
+  }
+  .post .meta .pill {
+    display: inline-block;
+    padding: 1px 8px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    margin-right: 6px;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .post .meta .pill.new {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(156, 42, 31, 0.06);
+  }
+  .post .arrow {
+    color: var(--line);
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    transition: transform 0.3s, color 0.3s;
+    align-self: center;
+  }
+  .post:hover .arrow { color: var(--accent); transform: translateX(4px); }
+
+  /* ===== 工具网格 ===== */
+  .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tool {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 18px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .tool:hover {
+    transform: translateY(-3px);
+    border-color: var(--ink);
+    box-shadow: var(--shadow-md);
+  }
+  .tool::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--accent);
+    transform: translateX(-4px);
+    transition: transform 0.3s;
+  }
+  .tool:hover::before { transform: translateX(0); }
+  .tool .label {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .tool .name {
+    font-family: 'Fraunces', 'Noto Serif SC', serif;
+    font-weight: 500;
+    font-size: 16.5px;
+    line-height: 1.3;
+    margin-bottom: 5px;
+  }
+  .tool .desc {
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    line-height: 1.6;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  /* ===== 联系区：极简，去掉中文大标题 ===== */
+  .contact {
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 20px;
+    padding: 32px;
+    margin-top: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact::before {
+    content: '';
+    position: absolute;
+    right: -100px;
+    top: -100px;
+    width: 260px;
+    height: 260px;
+    background: radial-gradient(circle, var(--accent) 0%, transparent 65%);
+    opacity: 0.32;
+  }
+  .contact-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid rgba(240, 233, 218, 0.18);
+    position: relative;
+  }
+  .contact-head h3 {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .contact-head h3 .num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--ink);
+    background: var(--accent-2);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    padding: 4px 10px 4px 9px;
+    border-radius: 3px;
+    line-height: 1;
+    flex-shrink: 0;
+    transform: translateY(-1px);
+  }
+  .contact-head h3 .title-zh {
+    font-family: 'Fraunces', 'Noto Serif SC', serif;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    color: var(--bg);
+    line-height: 1;
+  }
+  .contact-head h3 .title-en {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    padding-left: 12px;
+    border-left: 1px solid rgba(240, 233, 218, 0.2);
+    line-height: 1;
+  }
+  .contact-head .note {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--accent-2);
+    opacity: 0.7;
+  }
+  .contact-intro {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 14px;
+    color: rgba(240, 233, 218, 0.7);
+    line-height: 1.75;
+    margin-bottom: 22px;
+    max-width: 42ch;
+    position: relative;
+  }
+  .contact-intro .hl {
+    color: var(--accent-2);
+    font-style: italic;
+    font-family: 'Fraunces', serif;
+  }
+
+  .contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    position: relative;
+    background: rgba(240, 233, 218, 0.10);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 18px;
+    background: rgba(22, 19, 16, 0.65);
+    text-decoration: none;
+    color: var(--bg);
+    font-size: 14px;
+    transition: background 0.25s;
+    font-family: 'Noto Serif SC', serif;
+  }
+  .contact-item:hover { background: rgba(156, 42, 31, 0.22); }
+  .contact-item .ci-label {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--accent-2);
+    letter-spacing: 0.02em;
+    width: 88px;
+    flex-shrink: 0;
+  }
+  .contact-item .ci-val { flex: 1; color: var(--bg); }
+  .contact-item .ci-arrow {
+    color: rgba(240, 233, 218, 0.4);
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    transition: color 0.2s, transform 0.2s;
+  }
+  .contact-item:hover .ci-arrow {
+    color: var(--accent-2);
+    transform: translateX(3px);
+  }
+
+  /* ===== 页脚 ===== */
+  .footer {
+    text-align: center;
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--ink-mute);
+    line-height: 2;
+    letter-spacing: 0.1em;
+  }
+  .footer .sep { margin: 0 10px; color: var(--line); }
+
+  /* ===== 移动端 ===== */
+  @media (max-width: 540px) {
+    .container { padding: 24px 18px 60px; }
+    .masthead { gap: 10px; }
+    .masthead-meta { display: none; }
+    .topnav { gap: 16px; font-size: 10.5px; }
+    .logo-main { font-size: 24px; }
+    .logo-stamp { width: 26px; height: 26px; font-size: 11px; margin-left: 8px; }
+    .greeting { font-size: 22px; }
+    .contact { padding: 26px 22px; }
+    .section-head h2 .title-zh,
+    .contact-head h3 .title-zh { font-size: 20px; }
+    .section-head h2 .title-en,
+    .contact-head h3 .title-en { display: none; }
+    .post .title { font-size: 15.5px; }
+  }
+
+  /* ===== 动画 ===== */
+  .fade-in { opacity: 0; transform: translateY(8px); animation: fadeIn 0.7s ease forwards; }
+  .fade-in:nth-child(1) { animation-delay: 0.05s; }
+  .fade-in:nth-child(2) { animation-delay: 0.15s; }
+  .fade-in:nth-child(3) { animation-delay: 0.25s; }
+  .fade-in:nth-child(4) { animation-delay: 0.35s; }
+  .fade-in:nth-child(5) { animation-delay: 0.45s; }
+  .fade-in:nth-child(6) { animation-delay: 0.55s; }
+  @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- 紧凑刊头：Logo + 编号 + 导航全部塞进一行 -->
+  <header class="masthead fade-in">
+    <div class="masthead-left">
+      <div class="logo">
+        <span class="logo-main">Chanchan<span class="lab"> Lab</span></span>
+        <span class="logo-stamp">实</span>
+      </div>
+      <span class="masthead-meta">No. <span class="vol">047</span> · <em>Spring 2026</em></span>
+    </div>
+    <nav class="topnav">
+      <a href="#posts">观点</a>
+      <a href="#tools">工具箱</a>
+      <a href="#contact">联系</a>
+    </nav>
+  </header>
+
+  <!-- Hero：去掉 kicker，问候浓缩成单行 -->
+  <section class="hero fade-in">
+    <h1 class="greeting">
+      <span class="you-hao">你好呀，我是</span>
+      <span class="name">Chanchan</span>
+      <span class="wave">👋</span>
+    </h1>
+    <p class="role">
+      在做 <span class="tag">Obsidian</span> 与 <span class="tag">Mac 自动化</span> 的笔记狂人，用第二大脑过日子，已第七年。
+    </p>
+  </section>
+
+  <!-- 介绍 -->
+  <section class="intro fade-in">
+    这里是我整理的<span class="hl">第二大脑</span>。
+    我在小红书写方法论，在这里写更长的思考；更新自己用了七年的笔记系统、Mac 自动化脚本，以及那些在 140 字里说不完的事。
+  </section>
+
+  <!-- 文章 -->
+  <section class="section" id="posts">
+    <div class="section-head fade-in">
+      <h2>
+        <span class="num">N°1</span>
+        <span class="title-zh">最近在写</span>
+        <span class="title-en">Recent Notes</span>
+      </h2>
+      <a href="#" class="more">All →</a>
+    </div>
+
+    <div class="post-list">
+      <a href="#" class="post fade-in">
+        <span class="num">01</span>
+        <div class="body">
+          <div class="title">我用三年时间，放弃了 Notion 回到纯文本</div>
+          <div class="meta">
+            <span class="pill new">New</span>
+            <span class="pill">长文</span>
+            14 min · Feb 2026
+          </div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="#" class="post fade-in">
+        <span class="num">02</span>
+        <div class="body">
+          <div class="title">Obsidian 双链笔记的七个反直觉用法</div>
+          <div class="meta"><span class="pill">方法论</span> 9 min · Jan 2026</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="#" class="post fade-in">
+        <span class="num">03</span>
+        <div class="body">
+          <div class="title">为什么我每天花 30 分钟整理"昨日笔记"</div>
+          <div class="meta"><span class="pill">习惯</span> 6 min · Jan 2026</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="#" class="post fade-in">
+        <span class="num">04</span>
+        <div class="body">
+          <div class="title">把杂事变成一行代码：我的 Mac Shortcuts 清单</div>
+          <div class="meta"><span class="pill">工具</span> 11 min · Dec 2025</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 工具箱 -->
+  <section class="section" id="tools">
+    <div class="section-head fade-in">
+      <h2>
+        <span class="num">N°2</span>
+        <span class="title-zh">实验室工具箱</span>
+        <span class="title-en">Toolbox</span>
+      </h2>
+      <a href="#" class="more">All →</a>
+    </div>
+    <div class="tool-grid">
+      <a href="#" class="tool fade-in">
+        <div class="label">— Templates</div>
+        <div class="name">Obsidian 模板包</div>
+        <div class="desc">日记 / 周记 / 项目模板，共 37 份</div>
+      </a>
+      <a href="#" class="tool fade-in">
+        <div class="label">— Scripts</div>
+        <div class="name">Mac 自动化合集</div>
+        <div class="desc">Shortcuts 与 Hammerspoon 实战</div>
+      </a>
+      <a href="#" class="tool fade-in">
+        <div class="label">— Library</div>
+        <div class="name">我的书架</div>
+        <div class="desc">2026 在读与年度推荐</div>
+      </a>
+      <a href="#" class="tool fade-in">
+        <div class="label">— Newsletter</div>
+        <div class="name">订阅小报</div>
+        <div class="desc">每两周一封深度长文</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 联系区：标题简化为 "联系方式"，去掉"来实验室坐坐" -->
+  <section class="contact fade-in" id="contact">
+    <div class="contact-head">
+      <h3>
+        <span class="num">N°3</span>
+        <span class="title-zh">联系方式</span>
+        <span class="title-en">Get in Touch</span>
+      </h3>
+    </div>
+    <p class="contact-intro">
+      加微信备注「<span class="hl">网站</span>」可领取 Obsidian 模板包，<br>
+      也欢迎来小红书评论区，每条都会读。
+    </p>
+
+    <div class="contact-list">
+      <a href="#" class="contact-item">
+        <span class="ci-label">Xiaohongshu</span>
+        <span class="ci-val">@Chanchan 实验室</span>
+        <span class="ci-arrow">→</span>
+      </a>
+      <a href="#" class="contact-item">
+        <span class="ci-label">WeChat</span>
+        <span class="ci-val">点击查看二维码</span>
+        <span class="ci-arrow">→</span>
+      </a>
+      <a href="mailto:hi@chanchanlab.com" class="contact-item">
+        <span class="ci-label">Email</span>
+        <span class="ci-val">hi@chanchanlab.com</span>
+        <span class="ci-arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    © 2026 Chanchan Lab
+    <span class="sep">·</span> Built with Claude Code
+    <span class="sep">·</span> 独立写作，不接广告
+  </footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({behavior: 'smooth', block: 'start'}); }
+    });
+  });
+</script>
+
+</body>
+</html>
