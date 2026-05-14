@@ -724,11 +724,11 @@
         <div class="name">我的书架</div>
         <div class="desc">2026 在读与年度推荐</div>
       </a>
-      <a href="#" class="tool fade-in">
+      <button onclick="document.getElementById('newsletter-overlay').classList.add('open')" class="tool fade-in" style="text-align:left;cursor:pointer;border:none;width:100%;">
         <div class="label">— Newsletter</div>
         <div class="name">订阅小报</div>
         <div class="desc">每两周一封深度长文</div>
-      </a>
+      </button>
     </div>
   </section>
 
@@ -772,6 +772,16 @@
 
 </div>
 
+<!-- 订阅小报弹窗 -->
+<div class="qr-overlay" id="newsletter-overlay" onclick="this.classList.remove('open')">
+  <div class="qr-box" style="max-width:360px;" onclick="event.stopPropagation()">
+    <button class="qr-close" onclick="document.getElementById('newsletter-overlay').classList.remove('open')">✕</button>
+    <p style="font-family:'Fraunces',serif;font-size:18px;font-weight:500;color:var(--ink);margin-bottom:6px;">订阅 Chanchan 小报</p>
+    <p style="font-size:12px;color:var(--ink-mute);margin-bottom:16px;">每两周一封，聊笔记、自动化和独立思考。</p>
+    <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="3fe800e7-2c48-419e-8174-d8c38de7ce96"></script>
+  </div>
+</div>
+
 <!-- 微信二维码弹窗 -->
 <div class="qr-overlay" id="qr-overlay" onclick="this.classList.remove('open')">
   <div class="qr-box" onclick="event.stopPropagation()">
@@ -789,7 +799,10 @@
     });
   });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') document.getElementById('qr-overlay').classList.remove('open');
+    if (e.key === 'Escape') {
+      document.getElementById('qr-overlay').classList.remove('open');
+      document.getElementById('newsletter-overlay').classList.remove('open');
+    }
   });
 </script>
 
