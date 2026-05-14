@@ -552,6 +552,37 @@
     .post .title { font-size: 15.5px; }
   }
 
+  /* ===== 订阅小报 section ===== */
+  .newsletter-section {
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .newsletter-section::before {
+    content: '';
+    position: absolute;
+    right: -100px;
+    top: -100px;
+    width: 260px;
+    height: 260px;
+    background: radial-gradient(circle, var(--accent) 0%, transparent 65%);
+    opacity: 0.32;
+  }
+  .newsletter-section::after {
+    content: '';
+    position: absolute;
+    left: -60px;
+    bottom: -60px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, var(--accent-2) 0%, transparent 65%);
+    opacity: 0.12;
+  }
+
   /* ===== 订阅弹窗 ===== */
   .newsletter-box {
     background: var(--ink);
@@ -729,6 +760,7 @@
     <nav class="topnav">
       <a href="#posts">观点</a>
       <a href="#tools">工具箱</a>
+      <a href="#newsletter">订阅</a>
       <a href="#contact">联系</a>
     </nav>
   </header>
@@ -828,19 +860,35 @@
         <div class="name">我的书架</div>
         <div class="desc">2026 在读与年度推荐</div>
       </a>
-      <button onclick="document.getElementById('newsletter-overlay').classList.add('open')" class="tool fade-in" style="text-align:left;cursor:pointer;border:none;width:100%;">
+      <a href="#newsletter" class="tool fade-in">
         <div class="label">— Newsletter</div>
         <div class="name">订阅小报</div>
         <div class="desc">每两周一封深度长文</div>
-      </button>
+      </a>
     </div>
+  </section>
+
+  <!-- 订阅小报 -->
+  <section class="newsletter-section fade-in" id="newsletter">
+    <div class="contact-head">
+      <h3>
+        <span class="num">N°3</span>
+        <span class="title-zh">订阅小报</span>
+        <span class="title-en">Newsletter</span>
+      </h3>
+    </div>
+    <p class="contact-intro">
+      每两周一封，聊笔记系统、Mac 自动化与独立思考。<br>
+      填入邮箱，直接送达。
+    </p>
+    <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="3fe800e7-2c48-419e-8174-d8c38de7ce96"></script>
   </section>
 
   <!-- 联系区：标题简化为 "联系方式"，去掉"来实验室坐坐" -->
   <section class="contact fade-in" id="contact">
     <div class="contact-head">
       <h3>
-        <span class="num">N°3</span>
+        <span class="num">N°4</span>
         <span class="title-zh">联系方式</span>
         <span class="title-en">Get in Touch</span>
       </h3>
@@ -876,19 +924,6 @@
 
 </div>
 
-<!-- 订阅小报弹窗 -->
-<div class="qr-overlay" id="newsletter-overlay" onclick="this.classList.remove('open')">
-  <div class="newsletter-box" onclick="event.stopPropagation()">
-    <button class="qr-close" style="color:rgba(240,233,218,0.45);" onclick="document.getElementById('newsletter-overlay').classList.remove('open')">✕</button>
-    <p class="nl-title">订阅 Chanchan 小报</p>
-    <p class="nl-desc">每两周一封，聊笔记系统、Mac 自动化与独立思考。</p>
-    <form onsubmit="nlGo(event)">
-      <label class="nl-label" for="nl-email">填入邮箱</label>
-      <input class="nl-input" id="nl-email" type="email" placeholder="your@email.com" required>
-      <button class="nl-btn" type="submit">订阅</button>
-    </form>
-  </div>
-</div>
 
 <!-- 微信二维码弹窗 -->
 <div class="qr-overlay" id="qr-overlay" onclick="this.classList.remove('open')">
@@ -906,17 +941,8 @@
       if (t) { e.preventDefault(); t.scrollIntoView({behavior: 'smooth', block: 'start'}); }
     });
   });
-  function nlGo(e) {
-    e.preventDefault();
-    const email = document.getElementById('nl-email').value;
-    window.open('https://chanchanlab-newsletter-421152.beehiiv.com/?email=' + encodeURIComponent(email), '_blank');
-  }
-
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      document.getElementById('qr-overlay').classList.remove('open');
-      document.getElementById('newsletter-overlay').classList.remove('open');
-    }
+    if (e.key === 'Escape') document.getElementById('qr-overlay').classList.remove('open');
   });
 
 
