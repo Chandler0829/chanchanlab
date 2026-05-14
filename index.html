@@ -611,16 +611,24 @@
 
   /* ===== 二维码弹窗 ===== */
   .qr-overlay {
-    display: none;
     position: fixed;
     inset: 0;
     background: rgba(22, 19, 16, 0.72);
     z-index: 999;
+    display: flex;
     align-items: center;
     justify-content: center;
     backdrop-filter: blur(4px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s, visibility 0.2s;
   }
-  .qr-overlay.open { display: flex; }
+  .qr-overlay.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
   .qr-box {
     background: var(--bg-elev);
     border-radius: 20px;
@@ -781,7 +789,7 @@
         <div class="name">我的书架</div>
         <div class="desc">2026 在读与年度推荐</div>
       </a>
-      <button onclick="openNewsletter()" class="tool fade-in" style="text-align:left;cursor:pointer;border:none;width:100%;">
+      <button onclick="document.getElementById('newsletter-overlay').classList.add('open')" class="tool fade-in" style="text-align:left;cursor:pointer;border:none;width:100%;">
         <div class="label">— Newsletter</div>
         <div class="name">订阅小报</div>
         <div class="desc">每两周一封深度长文</div>
@@ -835,7 +843,7 @@
     <button class="qr-close" style="color:rgba(240,233,218,0.45);" onclick="document.getElementById('newsletter-overlay').classList.remove('open')">✕</button>
     <p class="nl-title">订阅 Chanchan 小报</p>
     <p class="nl-desc">每两周一封，聊笔记系统、Mac 自动化与独立思考。</p>
-    <iframe id="beehiiv-frame" src="" style="width:100%;min-height:220px;border:none;border-radius:10px;display:block;" scrolling="no"></iframe>
+    <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="3fe800e7-2c48-419e-8174-d8c38de7ce96"></script>
   </div>
 </div>
 
@@ -862,13 +870,6 @@
     }
   });
 
-  function openNewsletter() {
-    const frame = document.getElementById('beehiiv-frame');
-    if (!frame.src) {
-      frame.src = 'https://subscribe-forms.beehiiv.com/v3/forms/3fe800e7-2c48-419e-8174-d8c38de7ce96';
-    }
-    document.getElementById('newsletter-overlay').classList.add('open');
-  }
 
 </script>
 
