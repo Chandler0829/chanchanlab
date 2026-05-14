@@ -882,9 +882,9 @@
     <button class="qr-close" style="color:rgba(240,233,218,0.45);" onclick="document.getElementById('newsletter-overlay').classList.remove('open')">✕</button>
     <p class="nl-title">订阅 Chanchan 小报</p>
     <p class="nl-desc">每两周一封，聊笔记系统、Mac 自动化与独立思考。</p>
-    <form action="https://chanchanlab-newsletter-421152.beehiiv.com/subscribe" method="POST" target="_blank">
+    <form onsubmit="nlGo(event)">
       <label class="nl-label" for="nl-email">填入邮箱</label>
-      <input class="nl-input" id="nl-email" name="email" type="email" placeholder="your@email.com" required>
+      <input class="nl-input" id="nl-email" type="email" placeholder="your@email.com" required>
       <button class="nl-btn" type="submit">订阅</button>
     </form>
   </div>
@@ -906,6 +906,12 @@
       if (t) { e.preventDefault(); t.scrollIntoView({behavior: 'smooth', block: 'start'}); }
     });
   });
+  function nlGo(e) {
+    e.preventDefault();
+    const email = document.getElementById('nl-email').value;
+    window.open('https://chanchanlab-newsletter-421152.beehiiv.com/?email=' + encodeURIComponent(email), '_blank');
+  }
+
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       document.getElementById('qr-overlay').classList.remove('open');
