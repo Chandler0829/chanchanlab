@@ -604,10 +604,49 @@
     padding-bottom: 20px;
     border-bottom: 1px solid rgba(240,233,218,0.12);
   }
-  .newsletter-box iframe {
-    border-radius: 10px;
-    overflow: hidden;
+  .nl-label {
+    display: block;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--accent-2);
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    position: relative;
   }
+  .nl-input {
+    display: block;
+    width: 100%;
+    background: rgba(240,233,218,0.08);
+    border: 1px solid rgba(240,233,218,0.2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px;
+    color: var(--bg);
+    outline: none;
+    margin-bottom: 14px;
+    transition: border-color 0.2s, background 0.2s;
+    box-sizing: border-box;
+  }
+  .nl-input::placeholder { color: rgba(240,233,218,0.28); }
+  .nl-input:focus { border-color: var(--accent-2); background: rgba(240,233,218,0.13); }
+  .nl-btn {
+    display: block;
+    width: 100%;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    font-family: 'Fraunces', 'Noto Serif SC', serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nl-btn:hover { background: #b33324; transform: translateY(-1px); }
 
   /* ===== 二维码弹窗 ===== */
   .qr-overlay {
@@ -843,7 +882,11 @@
     <button class="qr-close" style="color:rgba(240,233,218,0.45);" onclick="document.getElementById('newsletter-overlay').classList.remove('open')">✕</button>
     <p class="nl-title">订阅 Chanchan 小报</p>
     <p class="nl-desc">每两周一封，聊笔记系统、Mac 自动化与独立思考。</p>
-    <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="3fe800e7-2c48-419e-8174-d8c38de7ce96"></script>
+    <form action="https://app.beehiiv.com/subscribe/e258ba3e-ec7d-4724-89d2-cacc60a3bb76" method="POST" target="_blank">
+      <label class="nl-label" for="nl-email">填入邮箱</label>
+      <input class="nl-input" id="nl-email" name="email" type="email" placeholder="your@email.com" required>
+      <button class="nl-btn" type="submit">订阅</button>
+    </form>
   </div>
 </div>
 
